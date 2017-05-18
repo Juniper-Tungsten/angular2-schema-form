@@ -17,17 +17,18 @@ import {
 
 @Component({
   selector: 'sf-form-element',
-  template: `<div *ngIf="formProperty.visible"
-    [class.has-error]="!control.valid"
-	  [class.has-success]="control.valid">
-	<sf-widget-chooser
-	(widgetInstanciated)="onWidgetInstanciated($event)"
-	[widgetInfo]="formProperty.schema.widget">
-	</sf-widget-chooser>
-	<div class="zion-form-actions">
-  <button class="btn" [attr.type]="button.type" *ngFor="let button of buttons" (click)="button.action($event)">{{button.label}}</button>
-  </div>
-</div>`
+  template: `
+    <div *ngIf="formProperty.visible"
+      [class.has-error]="!control.valid"
+	    [class.has-success]="control.valid">
+	    <sf-widget-chooser
+	      (widgetInstanciated)="onWidgetInstanciated($event)"
+	      [widgetInfo]="formProperty.schema.widget">
+	    </sf-widget-chooser>
+	    <div class="jws-form-actions">
+        <button class="btn" [ngClass]="button.CSSClass" [attr.type]="button.type" *ngFor="let button of buttons" (click)="button.action($event)">{{button.label}}</button>
+      </div>
+    </div>`
 })
 export class FormElementComponent implements OnInit {
 
@@ -54,6 +55,9 @@ export class FormElementComponent implements OnInit {
       for (let button of this.buttons) {
         if (!button.type) {
           button.type = 'button';
+        }
+        if (!button.CSSClass) {
+          button.CSSClass = [];
         }
         this.createButtonCallback(button);
       }
