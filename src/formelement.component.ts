@@ -24,8 +24,8 @@ import {
 	(widgetInstanciated)="onWidgetInstanciated($event)"
 	[widgetInfo]="formProperty.schema.widget">
 	</sf-widget-chooser>
-	<div class="zion-form-actions">
-	<sf-form-element-action class="btn" *ngFor="let button of buttons" [button]="button" [formProperty]="formProperty"></sf-form-element-action>
+	<div class="jws-form-actions">
+	<sf-form-element-action class="btn" [ngClass]="button.CSSClass" *ngFor="let button of buttons" [button]="button" [formProperty]="formProperty"></sf-form-element-action>
 	</div>
 </div>`
 })
@@ -54,6 +54,9 @@ export class FormElementComponent implements OnInit {
       for (let button of this.buttons) {
         if (!button.type) {
           button.type = 'button';
+        }
+        if (!button.CSSClass) {
+          button.CSSClass = [];
         }
         this.createButtonCallback(button);
       }

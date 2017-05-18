@@ -19,6 +19,9 @@ var FormElementComponent = (function () {
                 if (!button.type) {
                     button.type = 'button';
                 }
+                if (!button.CSSClass) {
+                    button.CSSClass = [];
+                }
                 this.createButtonCallback(button);
             }
         }
@@ -51,7 +54,7 @@ FormElementComponent.counter = 0;
 FormElementComponent.decorators = [
     { type: Component, args: [{
                 selector: 'sf-form-element',
-                template: "<div *ngIf=\"formProperty.visible\"\n    [class.has-error]=\"!control.valid\"\n\t  [class.has-success]=\"control.valid\">\n\t<sf-widget-chooser\n\t(widgetInstanciated)=\"onWidgetInstanciated($event)\"\n\t[widgetInfo]=\"formProperty.schema.widget\">\n\t</sf-widget-chooser>\n\t<div class=\"zion-form-actions\">\n  <button class=\"btn\" [attr.type]=\"button.type\" *ngFor=\"let button of buttons\" (click)=\"button.action($event)\">{{button.label}}</button>\n  </div>\n</div>"
+                template: "\n    <div *ngIf=\"formProperty.visible\"\n      [class.has-error]=\"!control.valid\"\n\t    [class.has-success]=\"control.valid\">\n\t    <sf-widget-chooser\n\t      (widgetInstanciated)=\"onWidgetInstanciated($event)\"\n\t      [widgetInfo]=\"formProperty.schema.widget\">\n\t    </sf-widget-chooser>\n\t    <div class=\"jws-form-actions\">\n        <button class=\"btn\" [ngClass]=\"button.CSSClass\" [attr.type]=\"button.type\" *ngFor=\"let button of buttons\" (click)=\"button.action($event)\">{{button.label}}</button>\n      </div>\n    </div>"
             },] },
 ];
 /** @nocollapse */
