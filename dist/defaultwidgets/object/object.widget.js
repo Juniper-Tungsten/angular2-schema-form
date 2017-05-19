@@ -21,7 +21,7 @@ export { ObjectWidget };
 ObjectWidget.decorators = [
     { type: Component, args: [{
                 selector: 'sf-form-object',
-                template: "<fieldset *ngFor=\"let fieldset of formProperty.schema.fieldsets\">\n\t<legend *ngIf=\"fieldset.title\">{{fieldset.title}}</legend>\n\t<div *ngFor=\"let fieldId of fieldset.fields\">\n\t\t<sf-form-element [formProperty]=\"formProperty.getProperty(fieldId)\"></sf-form-element>\n\t</div>\n</fieldset>"
+                template: "<fieldset *ngFor=\"let fieldset of formProperty.schema.fieldsets\" [ngClass]=\"fieldset.CSSClass || []\">\n\t<legend *ngIf=\"fieldset.title\">{{fieldset.title}}</legend>\n\t<div *ngFor=\"let fieldId of fieldset.fields\">\n\t\t<sf-form-element [formProperty]=\"formProperty.getProperty(fieldId)\"></sf-form-element>\n\t</div>\n</fieldset>"
             },] },
 ];
 /** @nocollapse */
