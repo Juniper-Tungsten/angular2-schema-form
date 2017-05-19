@@ -4,7 +4,7 @@ import { ObjectLayoutWidget } from '../../widget';
 
 @Component({
   selector: 'sf-form-object',
-  template: `<fieldset *ngFor="let fieldset of formProperty.schema.fieldsets">
+  template: `<fieldset *ngFor="let fieldset of formProperty.schema.fieldsets" [ngClass]="fieldset.CSSClass || []">
 	<legend *ngIf="fieldset.title">{{fieldset.title}}</legend>
 	<div *ngIf="fieldset.description">{{fieldset.description}}</div>
 	<div *ngFor="let fieldId of fieldset.fields">

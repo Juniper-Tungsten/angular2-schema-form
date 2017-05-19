@@ -5,26 +5,26 @@ import { ControlWidget } from '../../widget';
 @Component({
   selector: 'sf-checkbox-widget',
   template: `<div class="widget form-group">
-    <label [attr.for]="id" class="horizontal control-label">
+    <label [attr.for]="id" class="horizontal control-label" [ngClass]="{ 'hidden-xs-up hidden-xs-down': schema.title === schema.description }">
         {{ schema.title }}
     </label>
 	<div *ngIf="schema.type!='array'" class="checkbox">
-		<label class="horizontal control-label">
+		<span class="horizontal control-label">
 			<input [formControl]="control" [attr.name]="name" [indeterminate]="control.value !== false && control.value !== true ? true :null" type="checkbox" [attr.disabled]="schema.readOnly">
 			<input *ngIf="schema.readOnly" [attr.name]="name" type="hidden" [formControl]="control">
 			{{schema.description}}
-		</label>
+		</span>
 	</div>
 	<ng-container *ngIf="schema.type==='array'">
 		<div *ngFor="let option of schema.items.oneOf" class="checkbox">
-			<label class="horizontal control-label">
+			<span class="horizontal control-label">
 				<input [attr.name]="name"
 					value="{{option.enum[0]}}" type="checkbox" 
 					[attr.disabled]="schema.readOnly"
 					(change)="onCheck($event.target)"
 					[attr.checked]="checked[option.enum[0]] ? true : null">
 				{{option.description}}
-			</label>
+			</span>
 		</div>
 	</ng-container>
 </div>`
