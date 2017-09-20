@@ -140,6 +140,10 @@ var FormProperty = (function () {
         this._errors = errors;
         this._errorsChanges.next(errors);
     };
+    FormProperty.prototype.extendErrors = function (errors) {
+        errors = this.mergeErrors(this._errors || [], errors);
+        this.setErrors(errors);
+    };
     FormProperty.prototype.searchProperty = function (path) {
         var prop = this;
         var base = null;
@@ -175,7 +179,10 @@ var FormProperty = (function () {
     FormProperty.prototype._bindVisibility = function () {
         var _this = this;
         var visibleIf = this.schema.visibleIf;
-        if (visibleIf !== undefined) {
+        if (typeof visibleIf === 'object' && Object.keys(visibleIf).length === 0) {
+            this.setVisible(false);
+        }
+        else if (visibleIf !== undefined) {
             var propertiesBinding = [];
             var _loop_1 = function (dependencyPath) {
                 if (visibleIf.hasOwnProperty(dependencyPath)) {

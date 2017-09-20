@@ -19,7 +19,6 @@ var SchemaPreprocessor = (function () {
         if (jsonSchema.type === 'object') {
             SchemaPreprocessor.checkProperties(jsonSchema, path);
             SchemaPreprocessor.checkAndCreateFieldsets(jsonSchema, path);
-            SchemaPreprocessor.normalizeRequired(jsonSchema);
         }
         else if (jsonSchema.type === 'array') {
             SchemaPreprocessor.checkItems(jsonSchema, path);
@@ -86,7 +85,9 @@ var SchemaPreprocessor = (function () {
     SchemaPreprocessor.replaceOrderByFieldsets = function (jsonSchema) {
         jsonSchema.fieldsets = [{
                 id: 'fieldset-default',
-                title: jsonSchema.description || '',
+                title: jsonSchema.title || '',
+                description: jsonSchema.description || '',
+                name: jsonSchema.name || '',
                 fields: jsonSchema.order
             }];
         delete jsonSchema.order;
@@ -101,11 +102,6 @@ var SchemaPreprocessor = (function () {
         }
         fieldSchema.widget = widget;
     };
-    SchemaPreprocessor.normalizeRequired = function (jsonSchema) {
-        if (jsonSchema.type === 'object' && jsonSchema.required === undefined) {
-            jsonSchema.required = Object.keys(jsonSchema.properties);
-        }
-    };
     SchemaPreprocessor.checkItems = function (jsonSchema, path) {
         if (jsonSchema.items === undefined) {
             schemaError('No \'items\' property in array', path);
@@ -119,9 +115,34 @@ var SchemaPreprocessor = (function () {
                     SchemaPreprocessor.preprocess(fieldSchema, path + fieldId + '/');
                 }
             }
+            if (jsonSchema.hasOwnProperty('definitions')) {
+                for (var fieldId in jsonSchema.definitions) {
+                    if (jsonSchema.definitions.hasOwnProperty(fieldId)) {
+                        var fieldSchema = jsonSchema.definitions[fieldId];
+                        SchemaPreprocessor.removeRecursiveRefProperties(fieldSchema, "#/definitions/" + fieldId);
+                        SchemaPreprocessor.preprocess(fieldSchema, path + fieldId + '/');
+                    }
+                }
+            }
         }
         else if (jsonSchema.type === 'array') {
             SchemaPreprocessor.preprocess(jsonSchema.items, path + '*/');
+        }
+    };
+    SchemaPreprocessor.removeRecursiveRefProperties = function (jsonSchema, definitionPath) {
+        // to avoid infinite loop
+        if (jsonSchema.type === 'object') {
+            for (var fieldId in jsonSchema.properties) {
+                if (jsonSchema.properties.hasOwnProperty(fieldId)) {
+                    if (jsonSchema.properties[fieldId].$ref
+                        && jsonSchema.properties[fieldId].$ref === definitionPath) {
+                        delete jsonSchema.properties[fieldId];
+                    }
+                    else if (jsonSchema.properties[fieldId].type === 'object') {
+                        SchemaPreprocessor.removeRecursiveRefProperties(jsonSchema.properties[fieldId], definitionPath);
+                    }
+                }
+            }
         }
     };
     return SchemaPreprocessor;

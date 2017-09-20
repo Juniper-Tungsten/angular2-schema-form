@@ -36,8 +36,11 @@ var AtomicProperty = (function (_super) {
         }
         this._value = value;
     };
-    AtomicProperty.prototype._updateValue = function () { };
-    ;
+    AtomicProperty.prototype._hasValue = function () {
+        return this.fallbackValue() !== this.value;
+    };
+    AtomicProperty.prototype._updateValue = function () {
+    };
     return AtomicProperty;
 }(FormProperty));
 export { AtomicProperty };

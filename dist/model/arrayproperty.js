@@ -36,13 +36,16 @@ var ArrayProperty = (function (_super) {
         this.resetProperties(value);
         this.updateValueAndValidity(onlySelf, true);
     };
+    ArrayProperty.prototype._hasValue = function () {
+        return true;
+    };
     ArrayProperty.prototype._updateValue = function () {
         this.reduceValue();
     };
     ArrayProperty.prototype.reduceValue = function () {
         var value = [];
         this.forEachChild(function (property, _) {
-            if (property.visible) {
+            if (property.visible && property._hasValue()) {
                 value.push(property.value);
             }
         });

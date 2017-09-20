@@ -15,19 +15,17 @@ var NumberProperty = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     NumberProperty.prototype.fallbackValue = function () {
-        var value;
-        if (this.schema.minimum !== undefined) {
-            value = this.schema.minimum;
-        }
-        else {
-            value = 0;
-        }
-        return value;
+        return null;
     };
     NumberProperty.prototype.setValue = function (value, onlySelf) {
         if (onlySelf === void 0) { onlySelf = false; }
         if (typeof value === 'string') {
-            value = value.indexOf('.') > -1 ? parseFloat(value) : parseInt(value, 10);
+            if (value.length) {
+                value = value.indexOf('.') > -1 ? parseFloat(value) : parseInt(value, 10);
+            }
+            else {
+                value = null;
+            }
         }
         this._value = value;
         this.updateValueAndValidity(onlySelf, true);

@@ -15,14 +15,14 @@ var TextAreaWidget = (function (_super) {
     function TextAreaWidget() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    TextAreaWidget.decorators = [
+        { type: Component, args: [{
+                    selector: 'sf-textarea-widget',
+                    template: "<div class=\"widget form-group\">\n\t<label [attr.for]=\"id\" class=\"horizontal control-label\">\n\t\t{{ schema.title }}\n\t</label>\n    <span *ngIf=\"schema.description\" class=\"formHelp\">{{schema.description}}</span>\n\t<textarea [attr.readonly]=\"schema.readOnly\" [name]=\"name\"\n\t\tclass=\"text-widget textarea-widget form-control\"\n\t\t[attr.placeholder]=\"schema.placeholder\"\n\t\t[attr.maxLength]=\"schema.maxLength || null\"\n    [attr.minLength]=\"schema.minLength || null\"\n\t\t[formControl]=\"control\"></textarea>\n</div>"
+                },] },
+    ];
+    /** @nocollapse */
+    TextAreaWidget.ctorParameters = function () { return []; };
     return TextAreaWidget;
 }(ControlWidget));
 export { TextAreaWidget };
-TextAreaWidget.decorators = [
-    { type: Component, args: [{
-                selector: 'sf-textarea-widget',
-                template: "<div class=\"widget form-group\">\n\t<label [attr.for]=\"id\" class=\"horizontal control-label\">\n\t\t{{ schema.title }}\n\t</label>\n    <span *ngIf=\"schema.description\" class=\"formHelp\">{{schema.description}}</span>\n\t<textarea [attr.readonly]=\"schema.readOnly\" [name]=\"name\" class=\"text-widget textarea-widget form-control\" [formControl]=\"control\"></textarea>\n</div>"
-            },] },
-];
-/** @nocollapse */
-TextAreaWidget.ctorParameters = function () { return []; };

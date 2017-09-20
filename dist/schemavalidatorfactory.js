@@ -30,8 +30,38 @@ var ZSchemaValidatorFactory = (function (_super) {
             }
             _this.zschema.validate(value, schema);
             var err = _this.zschema.getLastErrors();
+            _this.denormalizeRequiredPropertyPaths(err);
             return err || null;
         };
+    };
+    ZSchemaValidatorFactory.prototype.getSchema = function (schema, ref) {
+        // check definitions are valid
+        var isValid = this.zschema.compileSchema(schema);
+        if (isValid) {
+            return this.getDefinition(schema, ref);
+        }
+        else {
+            throw this.zschema.getLastError();
+        }
+    };
+    ZSchemaValidatorFactory.prototype.denormalizeRequiredPropertyPaths = function (err) {
+        if (err && err.length) {
+            err = err.map(function (error) {
+                if (error.path === '#/' && error.code === 'OBJECT_MISSING_REQUIRED_PROPERTY') {
+                    error.path = "" + error.path + error.params[0];
+                }
+                return error;
+            });
+        }
+    };
+    ZSchemaValidatorFactory.prototype.getDefinition = function (schema, ref) {
+        var foundSchema = schema;
+        ref.split('/').slice(1).forEach(function (ptr) {
+            if (ptr) {
+                foundSchema = foundSchema[ptr];
+            }
+        });
+        return foundSchema;
     };
     return ZSchemaValidatorFactory;
 }(SchemaValidatorFactory));

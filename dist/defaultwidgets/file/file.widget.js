@@ -13,16 +13,40 @@ import { ControlWidget } from '../../widget';
 var FileWidget = (function (_super) {
     __extends(FileWidget, _super);
     function FileWidget() {
-        return _super.call(this) || this;
+        var _this = _super.call(this) || this;
+        _this.reader = new FileReader();
+        _this.filedata = {};
+        return _this;
     }
+    FileWidget.prototype.ngAfterViewInit = function () {
+        var _this = this;
+        // OVERRIDE ControlWidget ngAfterViewInit() as ReactiveForms do not handle
+        // file inputs
+        var control = this.control;
+        this.formProperty.errorsChanges.subscribe(function (errors) {
+            control.setErrors(errors, { emitEvent: true });
+        });
+        this.reader.onloadend = function () {
+            _this.filedata.data = btoa(_this.reader.result);
+            _this.formProperty.setValue(_this.filedata, false);
+        };
+    };
+    FileWidget.prototype.onFileChange = function ($event) {
+        var file = $event.target.files[0];
+        this.filedata.filename = file.name;
+        this.filedata.size = file.size;
+        this.filedata['content-type'] = file.type;
+        this.filedata.encoding = 'base64';
+        this.reader.readAsBinaryString(file);
+    };
+    FileWidget.decorators = [
+        { type: Component, args: [{
+                    selector: 'sf-file-widget',
+                    template: "<div class=\"widget form-group\">\n\t<label [attr.for]=\"id\" class=\"horizontal control-label\">\n\t\t{{ schema.title }}\n\t</label>\n    <span *ngIf=\"schema.description\" class=\"formHelp\">{{schema.description}}</span>\n  <input [name]=\"name\" class=\"text-widget file-widget\" [attr.id]=\"id\"\n    [formControl]=\"control\" type=\"file\" [attr.disabled]=\"schema.readOnly?true:null\"\n    (change)=\"onFileChange($event)\">\n\t<input *ngIf=\"schema.readOnly\" [attr.name]=\"name\" type=\"hidden\" [formControl]=\"control\">\n</div>"
+                },] },
+    ];
+    /** @nocollapse */
+    FileWidget.ctorParameters = function () { return []; };
     return FileWidget;
 }(ControlWidget));
 export { FileWidget };
-FileWidget.decorators = [
-    { type: Component, args: [{
-                selector: 'sf-file-widget',
-                template: "<div class=\"widget form-group\">\n\t<label [attr.for]=\"id\" class=\"horizontal control-label\">\n\t\t{{ schema.title }}\n\t</label>\n    <span *ngIf=\"schema.description\" class=\"formHelp\">{{schema.description}}</span>\n\t<input [name]=\"name\" class=\"text-widget file-widget\" [attr.id]=\"id\" [formControl]=\"control\" type=\"file\" [attr.disabled]=\"schema.readOnly?true:null\" >\n\t<input *ngIf=\"schema.readOnly\" [attr.name]=\"name\" type=\"hidden\" [formControl]=\"control\">\n</div>"
-            },] },
-];
-/** @nocollapse */
-FileWidget.ctorParameters = function () { return []; };

@@ -45,19 +45,33 @@ var ObjectProperty = (function (_super) {
         for (var propertyId in this.schema.properties) {
             if (this.schema.properties.hasOwnProperty(propertyId)) {
                 var propertySchema = this.schema.properties[propertyId];
-                var property = this.formPropertyFactory.createProperty(propertySchema, this, propertyId);
-                this.properties[propertyId] = property;
+                this.properties[propertyId] = this.formPropertyFactory.createProperty(propertySchema, this, propertyId);
                 this.propertiesId.push(propertyId);
             }
         }
     };
+    ObjectProperty.prototype._hasValue = function () {
+        return !!Object.keys(this.value).length;
+    };
     ObjectProperty.prototype._updateValue = function () {
         this.reduceValue();
+    };
+    ObjectProperty.prototype._runValidation = function () {
+        var _this = this;
+        _super.prototype._runValidation.call(this);
+        if (this._errors) {
+            this._errors.forEach(function (error) {
+                var prop = _this.searchProperty(error.path.slice(1));
+                if (prop) {
+                    prop.extendErrors(error);
+                }
+            });
+        }
     };
     ObjectProperty.prototype.reduceValue = function () {
         var value = {};
         this.forEachChild(function (property, propertyId) {
-            if (property.visible) {
+            if (property.visible && property._hasValue()) {
                 value[propertyId] = property.value;
             }
         });

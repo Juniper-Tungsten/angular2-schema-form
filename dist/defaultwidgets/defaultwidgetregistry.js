@@ -8,7 +8,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-import { ArrayWidget, ObjectWidget, CheckboxWidget, FileWidget, IntegerWidget, TextAreaWidget, RadioWidget, RangeWidget, SelectWidget, StringWidget } from './';
+import { ArrayWidget, ObjectWidget, CheckboxWidget, FileWidget, IntegerWidget, TextAreaWidget, RadioWidget, RangeWidget, SelectWidget, StringWidget, ButtonWidget } from './';
 import { WidgetRegistry } from '../widgetregistry';
 var DefaultWidgetRegistry = (function (_super) {
     __extends(DefaultWidgetRegistry, _super);
@@ -35,6 +35,7 @@ var DefaultWidgetRegistry = (function (_super) {
         _this.register('radio', RadioWidget);
         _this.register('boolean', CheckboxWidget);
         _this.register('checkbox', CheckboxWidget);
+        _this.register('button', ButtonWidget);
         _this.setDefaultWidget(StringWidget);
         return _this;
     }

@@ -15,7 +15,7 @@ var BooleanProperty = (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     BooleanProperty.prototype.fallbackValue = function () {
-        return false;
+        return null;
     };
     return BooleanProperty;
 }(AtomicProperty));

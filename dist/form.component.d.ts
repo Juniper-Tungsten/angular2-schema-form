@@ -19,6 +19,13 @@ export declare class FormComponent implements OnChanges {
     onChange: EventEmitter<{
         value: any;
     }>;
+    isValid: EventEmitter<boolean>;
+    onErrorChange: EventEmitter<{
+        value: any[];
+    }>;
+    onErrorsChange: EventEmitter<{
+        value: any;
+    }>;
     rootProperty: FormProperty;
     constructor(formPropertyFactory: FormPropertyFactory, actionRegistry: ActionRegistry, validatorRegistry: ValidatorRegistry, cdr: ChangeDetectorRef, terminator: TerminatorService);
     ngOnChanges(changes: any): void;

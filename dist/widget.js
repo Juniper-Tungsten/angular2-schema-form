@@ -31,9 +31,17 @@ var ControlWidget = (function (_super) {
             }
         });
         this.formProperty.errorsChanges.subscribe(function (errors) {
-            control.setErrors(errors, true);
+            control.setErrors(errors, { emitEvent: true });
+            var messages = (errors || [])
+                .filter(function (e) {
+                return e.path && e.path.slice(1) === _this.formProperty.path;
+            })
+                .map(function (e) { return e.message; });
+            _this.errorMessages = messages.filter(function (m, i) { return messages.indexOf(m) === i; });
         });
-        control.valueChanges.subscribe(function (newValue) { _this.formProperty.setValue(newValue, false); });
+        control.valueChanges.subscribe(function (newValue) {
+            _this.formProperty.setValue(newValue, false);
+        });
     };
     return ControlWidget;
 }(Widget));
@@ -43,6 +51,12 @@ var ArrayLayoutWidget = (function (_super) {
     function ArrayLayoutWidget() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    ArrayLayoutWidget.prototype.ngAfterViewInit = function () {
+        var control = this.control;
+        this.formProperty.errorsChanges.subscribe(function (errors) {
+            control.setErrors(errors, { emitEvent: true });
+        });
+    };
     return ArrayLayoutWidget;
 }(Widget));
 export { ArrayLayoutWidget };
@@ -51,6 +65,12 @@ var ObjectLayoutWidget = (function (_super) {
     function ObjectLayoutWidget() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
+    ObjectLayoutWidget.prototype.ngAfterViewInit = function () {
+        var control = this.control;
+        this.formProperty.errorsChanges.subscribe(function (errors) {
+            control.setErrors(errors, { emitEvent: true });
+        });
+    };
     return ObjectLayoutWidget;
 }(Widget));
 export { ObjectLayoutWidget };

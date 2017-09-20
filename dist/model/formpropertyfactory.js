@@ -31,27 +31,33 @@ var FormPropertyFactory = (function () {
         else {
             path = '/';
         }
-        switch (schema.type) {
-            case 'integer':
-            case 'number':
-                newProperty = new NumberProperty(this.schemaValidatorFactory, this.validatorRegistry, schema, parent, path);
-                break;
-            case 'string':
-                newProperty = new StringProperty(this.schemaValidatorFactory, this.validatorRegistry, schema, parent, path);
-                break;
-            case 'boolean':
-                newProperty = new BooleanProperty(this.schemaValidatorFactory, this.validatorRegistry, schema, parent, path);
-                break;
-            case 'object':
-                newProperty = new ObjectProperty(this, this.schemaValidatorFactory, this.validatorRegistry, schema, parent, path);
-                break;
-            case 'array':
-                newProperty = new ArrayProperty(this, this.schemaValidatorFactory, this.validatorRegistry, schema, parent, path);
-                break;
-            default:
-                throw new TypeError("Undefined type " + schema.type);
+        if (schema.$ref) {
+            var refSchema = this.schemaValidatorFactory.getSchema(parent.root.schema, schema.$ref);
+            newProperty = this.createProperty(refSchema, parent, path);
         }
-        if (newProperty instanceof PropertyGroup && parent === null) {
+        else {
+            switch (schema.type) {
+                case 'integer':
+                case 'number':
+                    newProperty = new NumberProperty(this.schemaValidatorFactory, this.validatorRegistry, schema, parent, path);
+                    break;
+                case 'string':
+                    newProperty = new StringProperty(this.schemaValidatorFactory, this.validatorRegistry, schema, parent, path);
+                    break;
+                case 'boolean':
+                    newProperty = new BooleanProperty(this.schemaValidatorFactory, this.validatorRegistry, schema, parent, path);
+                    break;
+                case 'object':
+                    newProperty = new ObjectProperty(this, this.schemaValidatorFactory, this.validatorRegistry, schema, parent, path);
+                    break;
+                case 'array':
+                    newProperty = new ArrayProperty(this, this.schemaValidatorFactory, this.validatorRegistry, schema, parent, path);
+                    break;
+                default:
+                    throw new TypeError("Undefined type " + schema.type);
+            }
+        }
+        if (newProperty instanceof PropertyGroup) {
             this.initializeRoot(newProperty);
         }
         return newProperty;

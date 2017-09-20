@@ -9,7 +9,6 @@ export declare abstract class FormProperty {
     private validatorRegistry;
     schema: any;
     schemaValidator: Function;
-    required: boolean;
     _value: any;
     _errors: any;
     private _valueChanges;
@@ -34,6 +33,7 @@ export declare abstract class FormProperty {
     updateValueAndValidity(onlySelf?: boolean, emitEvent?: boolean): void;
     private mergeErrors(errors, newErrors);
     private setErrors(errors);
+    extendErrors(errors: any): void;
     searchProperty(path: string): FormProperty;
     findRoot(): PropertyGroup;
     private setVisible(visible);
