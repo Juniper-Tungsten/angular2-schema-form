@@ -25,7 +25,7 @@ import {
 	[widgetInfo]="formProperty.schema.widget">
 	</sf-widget-chooser>
 	<div class="jws-form-actions">
-	<sf-form-element-action class="btn" [ngClass]="button.CSSClass" *ngFor="let button of buttons" [button]="button" [formProperty]="formProperty"></sf-form-element-action>
+	<sf-form-element-action *ngFor="let button of buttons" [button]="button" [formProperty]="formProperty"></sf-form-element-action>
 	</div>
 </div>`
 })
