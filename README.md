@@ -270,6 +270,82 @@ export class AppComponent {
 }
 ```
 
+#### Render buttons
+
+You may define you own widget to create buttons by 
+overriding the default widget for action buttons
+or create completely customized button widgets.
+
+##### Override
+
+Override the default action button widget 
+in your `WidgetRegistry` implementation
+and register your own button widget.
+
+```js
+    this.register('button', MyButtonWidgetComponent);
+```
+
+##### Custom
+
+Define a custom button widget by 
+setting the property `button.widget` in the schema
+
+```json
+    "password": {
+      "type": "string",
+      "description": "Password",
+      "buttons": [{
+        "id": "reset",
+        "label": "Reset"
+      },{
+        "id": "custom_b",
+        "label": "My custom button",
+        "widget": "my_custom_button" // custom widget name for this button
+      }]
+    },
+``` 
+
+and then register it in your `WidgetRegistry` implementation
+
+```js
+    this.register('my_custom_button', MyCustomButtonWidgetComponent);
+```
+  
+##### Binding
+
+The button widget will get provided the `button` object form the schema
+including the `button.action` from the action registry 
+and the `formProperty` object.
+
+To be fully AOT compatible 
+the custom button widget may then extend `ButtonWidget` or 
+provide the properties `button` and `formProperty` by it self.
+
+```js
+  import {Component} from "@angular/core";
+  import {ButtonWidget} from 'angular2-schema-form/dist/defaultwidgets'
+  
+  @Component({
+    selector: 'sf-button-widget',
+    templateUrl: 'custom-button.widget.html'
+  })
+  export class CustomWidgetComponent extends ButtonWidget {
+  
+  }
+```
+
+```js
+  @Component({
+    selector: 'sf-button-widget',
+    templateUrl: 'custom-button.widget.html'
+  })
+  export class CustomWidgetComponent {
+    public button
+    public formProperty
+  }
+```
+
 ### Advanced validation
 JSON schema provides validation against a static schema but its often necessary to provide other validation rules.
 The Form component accepts a `validators` input bound to a map between a field id and a validation function.
@@ -362,6 +438,48 @@ export class AppComponent {
     "required": ["name","comment","registerToNewsletter"]
   }
 }
+```
+Assigning an empty Object to 'visibleIf' is interpreted as _visibleIf_ nothing, thereby the widget is hidden.
+```js
+mySchema = {
+    "properties": {
+      "hidden": {
+        "type": "boolean",
+        "visibleIf": { }
+      }
+    }
+  }
+```
+
+#### Hidden fields
+When a field has been made invisible by the condition `visibleIf`
+then the property of the invisible field will be missing in the result model.
+
+If there is need to submit default values that are not visible for the form
+the `widget.id` `hidden` might be the better choice
+```js
+  mySchema = {
+    "properties": {
+      "hiddenInput": {
+        "type": "boolean",
+        "widget": "hidden",
+        "default": true
+      },
+      "lastName": {
+        "type": "string",
+        ...
+      }
+    }
+  }
+```
+so the value of the hidden field will be bound to the output model
+
+```js
+  {
+    "hiddenInput": true,
+    "lastName": "Doe",
+    ...
+  }
 ```
 
 ### Fields presentation and ordering
@@ -533,7 +651,7 @@ npm install -g @angular/cli
 cd ./tests
 npm install
 cd ./src/app
-ln -s ../../../src/
+ln -s ../../../src/ lib
 cd -
 ng serve
 ```

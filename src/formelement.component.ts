@@ -25,8 +25,8 @@ import {
 	[widgetInfo]="formProperty.schema.widget">
 	</sf-widget-chooser>
 	<div class="zion-form-actions">
-  <button class="btn" [attr.type]="button.type" *ngFor="let button of buttons" (click)="button.action($event)">{{button.label}}</button>
-  </div>
+	<sf-form-element-action class="btn" *ngFor="let button of buttons" [button]="button" [formProperty]="formProperty"></sf-form-element-action>
+	</div>
 </div>`
 })
 export class FormElementComponent implements OnInit {
