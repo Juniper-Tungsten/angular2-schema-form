@@ -5,7 +5,7 @@ var ButtonWidget = (function () {
     ButtonWidget.decorators = [
         { type: Component, args: [{
                     selector: 'sf-button-widget',
-                    template: '<button [attr.type]="button.type" (click)="button.action($event)">{{button.label}}</button>'
+                    template: '<button [attr.type]="button.type" class="btn" [ngClass]="button.CSSClass" (click)="button.action($event)">{{button.label}}</button>'
                 },] },
     ];
     /** @nocollapse */

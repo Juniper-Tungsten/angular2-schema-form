@@ -51,7 +51,7 @@ var FormElementComponent = (function () {
     FormElementComponent.decorators = [
         { type: Component, args: [{
                     selector: 'sf-form-element',
-                    template: "<div *ngIf=\"formProperty.visible\"\n    [class.has-error]=\"!control.valid\"\n\t  [class.has-success]=\"control.valid\">\n\t<sf-widget-chooser\n\t(widgetInstanciated)=\"onWidgetInstanciated($event)\"\n\t[widgetInfo]=\"formProperty.schema.widget\">\n\t</sf-widget-chooser>\n\t<div class=\"jws-form-actions\">\n\t<sf-form-element-action class=\"btn\" [ngClass]=\"button.CSSClass\" *ngFor=\"let button of buttons\" [button]=\"button\" [formProperty]=\"formProperty\"></sf-form-element-action>\n\t</div>\n</div>"
+                    template: "<div *ngIf=\"formProperty.visible\"\n    [class.has-error]=\"!control.valid\"\n\t  [class.has-success]=\"control.valid\">\n\t<sf-widget-chooser\n\t(widgetInstanciated)=\"onWidgetInstanciated($event)\"\n\t[widgetInfo]=\"formProperty.schema.widget\">\n\t</sf-widget-chooser>\n\t<div class=\"jws-form-actions\">\n\t<sf-form-element-action *ngFor=\"let button of buttons\" [button]=\"button\" [formProperty]=\"formProperty\"></sf-form-element-action>\n\t</div>\n</div>"
                 },] },
     ];
     /** @nocollapse */
